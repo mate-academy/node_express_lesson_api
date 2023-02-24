@@ -1,13 +1,14 @@
 import express from "express";
 import cors from "cors";
-import { colorController } from './controllers/color.controller';
-import { userController } from './controllers/user.controller';
 import { colorRouter } from './routers/color.router';
 import { userRouter } from './routers/user.router';
+import { dbInit } from '../unitl/dbInit';
 
 const PORT = 5000;
 
 const app = express();
+
+dbInit();
 
 app.use(cors());
 

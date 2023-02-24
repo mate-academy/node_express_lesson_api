@@ -1,19 +1,14 @@
 import { userService } from '../services/user.service';
 import { Request, Response } from 'express';
-import { colorService } from '../services/color.service';
 
-const getAll = (req: Request, res: Response) => {
-  const users = userService.getAll();
+const getAll = async (req: Request, res: Response) => {
+  const users = await userService.getAll();
 
   res.send(users);
 }
 
-const create = (req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
   const { name, carColorId } = req.body;
-
-  const colors = colorService.getAll();
-
-  const isColorIdExist = colors.some(c => c.id === carColorId);
 
   const isDataValid = !(
     !name
@@ -31,19 +26,19 @@ const create = (req: Request, res: Response) => {
     return;
   }
 
-  if (!isDataValid || !isColorIdExist) {
+  if (!isDataValid) {
     res.sendStatus(400);
 
     return;
   }
 
-  const createdUser = userService.create({ name, carColorId });
+  const createdUser = await userService.create({ name, carColorId });
 
   res.statusCode = 201;
   res.send(createdUser);
 }
 
-const getById = (req: Request, res: Response) => {
+const getById = async (req: Request, res: Response) => {
   const userId = Number(req.params.userId);
   const isUserIdValid = !Number.isNaN(userId);
 
@@ -53,7 +48,7 @@ const getById = (req: Request, res: Response) => {
     return;
   }
 
-  const user = userService.findById(userId);
+  const user = await userService.findById(userId);
 
   if (!user) {
     res.sendStatus(404);
